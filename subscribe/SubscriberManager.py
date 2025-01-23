@@ -42,7 +42,6 @@ class SubscriberManager:
     def notify_all_initialized(self):
         rospy.loginfo("ROS connection is establised!")
 
-
     '''
         subscribe related function
     '''
