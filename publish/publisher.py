@@ -1,5 +1,5 @@
 import numpy as np
-from dynamixel_ros_service import Control
+from dynamixel_ros_service import Orientation
 from .modules import InitializeCommandPublisher
 from .modules import JointCtrlPublisher
 from .modules import ValveCtrlPublisher
@@ -17,14 +17,14 @@ class Publisher:
         self.valve_ctrl      = ValveCtrlPublisher(params)
 
 
-    def publish_initialize_ctrl(self, ctrl: Control):
-        assert isinstance(ctrl, Control)
+    def publish_initialize_ctrl(self, ctrl: Orientation):
+        assert isinstance(ctrl, Orientation)
         initialize_command = np.hstack([ctrl.as_resvec(), self.current_limit, self.position_p_gain])
         self.initialize_ctrl.publish(initialize_command)
         self.joint_ctrl.publish(ctrl.as_resvec()) # <-- 必要：無いと初期化前の直前に使用された制御入力が入力され続けてしまう
 
-    def publish_joint_ctrl(self, ctrl: Control):
+    def publish_joint_ctrl(self, ctrl: Orientation):
         self.joint_ctrl.publish(ctrl.as_resvec())
 
-    def publish_valve_ctrl(self, ctrl: Control):
+    def publish_valve_ctrl(self, ctrl: Orientation):
         self.valve_ctrl.publish(ctrl.as_resvec())

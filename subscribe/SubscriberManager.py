@@ -1,4 +1,6 @@
 import rospy
+from copy import deepcopy
+import numpy as np
 from .modules import BaseSubscriber
 from .modules import InitializationStateSubscriber
 from .modules import JointPositionsSubscriber
@@ -7,6 +9,7 @@ from .modules import JointVelocitiesSubscriber
 from .modules import ValveMovingSubscriber
 from .modules import ValvePositionSubscriber
 from ..utils import ParameterObject
+from dynamixel_ros_service import Orientation
 
 
 class SubscriberManager:
@@ -46,7 +49,13 @@ class SubscriberManager:
         subscribe related function
     '''
     def get_joint_positions(self):
-        return self.joint_positions.data
+        resvec = np.array(deepcopy(self.joint_positions.data))
+        ori    = Orientation.from_resvec(resvec)
+        radvec = ori.as_radvec()
+        return radvec
 
     def get_valve_position(self):
-        return self.valve_position.data
+        resvec = np.array(deepcopy(self.valve_position.data))
+        ori    = Orientation.from_resvec(resvec)
+        radvec = ori.as_radvec()
+        return radvec
