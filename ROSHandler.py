@@ -21,3 +21,5 @@ class ROSHandler:
         while not self.subscriber.initialization_state.data:
             rospy.sleep(0.1)
         rospy.loginfo("initialization is finsed!!")
+
+
