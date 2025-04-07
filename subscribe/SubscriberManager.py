@@ -1,3 +1,4 @@
+from operator import imod
 import rospy
 from copy import deepcopy
 import numpy as np
@@ -8,6 +9,7 @@ from .modules import JointCurrentsSubscriber
 from .modules import JointVelocitiesSubscriber
 from .modules import ValveMovingSubscriber
 from .modules import ValvePositionSubscriber
+from .modules import CameraSubscriber
 from ..utils import ParameterObject
 from dynamixel_ros_service import Orientation
 
@@ -18,13 +20,15 @@ class SubscriberManager:
         self.num_total_subscribers = 5
         self.subscribers           = {} # 各IDとその状態を保持
         self.all_initialized       = None
-        # -----
-        self.initialization_state  = InitializationStateSubscriber() # これだけ登録しない
+        # ----- 最初に通信確認のために登録しておくsubscriber -----
         self.joint_positions       = JointPositionsSubscriber (id=1, manager=self)
         self.joint_currents        = JointCurrentsSubscriber  (id=2, manager=self)
         self.joint_velocities      = JointVelocitiesSubscriber(id=3, manager=self)
         self.valve_moving          = ValveMovingSubscriber    (id=4, manager=self)
         self.valve_position        = ValvePositionSubscriber  (id=0, manager=self)
+        # -----
+        self.initialization_state  = InitializationStateSubscriber() # 登録しない
+        self.camera                = CameraSubscriber()              # 登録しない
 
     '''
         initialization related function
@@ -59,3 +63,6 @@ class SubscriberManager:
         ori    = Orientation.from_resvec(resvec)
         radvec = ori.as_radvec()
         return radvec
+
+    def get_image(self):
+        return self.camera.data

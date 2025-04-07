@@ -6,3 +6,4 @@ from .JointCurrentsSubscriber import JointCurrentsSubscriber
 from .JointVelocitiesSubscriber import JointVelocitiesSubscriber
 from .ValveMovingSubscriber import ValveMovingSubscriber
 from .ValvePositionSubscriber import ValvePositionSubscriber
+from .CameraSubscriber import CameraSubscriber
